@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب معاش التقاعد</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+        }
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            direction: rtl;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 18px;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .result p span {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h2>حساب معاش التقاعد</h2>
+    <form id="retirementForm">
+        <label for="lastSalary">الراتب الأساسي الأخير:</label>
+        <input type="number" id="lastSalary" placeholder="أدخل الراتب الأساسي الأخير" required>
+
+        <label for="serviceDuration">مدة الخدمة (بالأشهر):</label>
+        <input type="number" id="serviceDuration" placeholder="أدخل مدة الخدمة بالأشهر" required>
+
+        <label for="retirementType">نوع التقاعد:</label>
+        <select id="retirementType" required>
+            <option value="">اختر نوع التقاعد</option>
+            <option value="civilian">التقاعد المدني</option>
+            <option value="military">التقاعد العسكري</option>
+        </select>
+
+        <button type="button" onclick="calculatePension()">احسب</button>
+    </form>
+
+    <div class="result" id="result">
+        <p>قيمة المعاش التقاعدي: <span id="pensionAmount">-</span> ريال</p>
+    </div>
+
+    <div class="footer">
+        <p>تم إنشاء الصفحة بواسطة أبو وسيم :)</p>
+    </div>
+
+    <script>
+        // دالة لتحويل الأرقام الإنجليزية إلى أرقام عربية
+        function convertToArabicNumbers(input) {
+            const arabicNumbers = {
+                0: '٠',
+                1: '١',
+                2: '٢',
+                3: '٣',
+                4: '٤',
+                5: '٥',
+                6: '٦',
+                7: '٧',
+                8: '٨',
+                9: '٩'
+            };
+            return input.toString().replace(/\d/g, (digit) => arabicNumbers[digit]);
+        }
+
+        function formatNumberWithCommas(number) {
+            // Format the number with Arabic digits and add commas
+            return convertToArabicNumbers(number.toLocaleString('en-US'));
+        }
+
+        function calculatePension() {
+            const lastSalary = parseFloat(document.getElementById('lastSalary').value);
+            const serviceDuration = parseFloat(document.getElementById('serviceDuration').value);
+            const retirementType = document.getElementById('retirementType').value;
+            let pensionAmount = 0;
+
+            if (retirementType === 'civilian') {
+                pensionAmount = (lastSalary * serviceDuration) / 480;
+            } else if (retirementType === 'military') {
+                pensionAmount = (lastSalary * serviceDuration) / 420;
+            } else {
+                alert("يرجى اختيار نوع التقاعد");
+                return;
+            }
+
+            // Display the result with Arabic numbers and formatted with commas
+            document.getElementById('pensionAmount').innerText = formatNumberWithCommas(pensionAmount.toFixed(2));
+        }
+    </script>
+</body>
+</html>
